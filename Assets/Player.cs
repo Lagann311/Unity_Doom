@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject BoxPrefab;
     public GameObject Hand;
-    public GameObject BallPrefab;
     public GameObject BombPrefab;
     public float JumpForce;
     public float ThrowForce;
@@ -26,7 +24,6 @@ public class Player : MonoBehaviour
     private bool isDashing = false;
     private float dashTimer = 0f;
     private float cooldownTimer = 0f;
-    private bool onGround;
 
     private void Awake()
     {
@@ -41,12 +38,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ToggleTimeScale  (KeyCode.T);
-        CreateBox        (KeyCode.E);
-        ThrowBall        (KeyCode.Q);
         PickUpObject     (KeyCode.Mouse1);
         ThrowBomb        (KeyCode.Mouse0);
-        ThrowObjectInHand(KeyCode.Mouse0);
         HandleDash();
         Dash             (KeyCode.F);
 
@@ -101,27 +94,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void ToggleTimeScale(KeyCode key)
-    {
-        if (!Input.GetKeyDown(key)) return;
-
-        if (Time.timeScale == 1F)
-        {
-            Time.timeScale = 0.5F;
-        }
-        else
-        {
-            Time.timeScale = 1F;
-        }
-    }
-
-    private void CreateBox(KeyCode key)
-    {
-        if (!Input.GetKeyDown(key)) return;
-
-        Instantiate(BoxPrefab, Hand.transform.position, Quaternion.identity);
-    }
-
     private void ThrowBomb(KeyCode key)
     {
         if (!Input.GetKeyDown(key)) return;
@@ -132,15 +104,6 @@ public class Player : MonoBehaviour
             Rigidbody rigidBody = bomb.GetComponent<Rigidbody>();
             rigidBody.AddForce(transform.forward * ThrowForce);
         }
-    }
-
-    private void ThrowBall(KeyCode key)
-    {
-        if (!Input.GetKeyDown(key)) return;
-
-        GameObject ball = Instantiate(BallPrefab, Hand.transform.position, Quaternion.identity);
-        Rigidbody rigidBody = ball.GetComponent<Rigidbody>();
-        rigidBody.AddForce(transform.forward * ThrowForce);
     }
 
     private void PickUpObject(KeyCode key)
@@ -161,19 +124,6 @@ public class Player : MonoBehaviour
                 objInHand.GetComponent<Rigidbody>().isKinematic = true;
                 objInHand.transform.parent = Hand.transform;
             }
-        }
-    }
-
-    private void ThrowObjectInHand(KeyCode key)
-    {
-        if (!Input.GetKeyDown(key)) return;
-
-        if (objInHand is not null)
-        {
-            objInHand.transform.parent = null;
-            objInHand.GetComponent<Rigidbody>().isKinematic = false;
-            objInHand.GetComponent<Rigidbody>().AddForce(Cam.transform.forward * ThrowForce);
-            objInHand = null;
         }
     }
 
