@@ -27,7 +27,7 @@ public class PlayerActions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ThrowBomb(KeyCode.Mouse0);
+        ThrowBomb(KeyCode.Mouse1);
         HandleDash();
         Dash(KeyCode.F);
     }
